@@ -4,14 +4,24 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import ca.csf.tp02_sam_lorik.database.connectDatabase
+import ca.csf.tp02_sam_lorik.screens.HomeScreen
+import ca.csf.tp02_sam_lorik.screens.Screens
 import ca.csf.tp02_sam_lorik.ui.theme.TP02_sam_lorikTheme
+import ca.csf.tp02_sam_lorik.viewModel.RecipeViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,10 +30,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             TP02_sam_lorikTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    Navigation(
+                        innerPadding = innerPadding
+                   )
                 }
             }
         }
@@ -31,17 +40,27 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+fun Navigation(innerPadding : PaddingValues) {
+    val navigationController = rememberNavController()
+    val db = connectDatabase(applicationContext = LocalContext.current)
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TP02_sam_lorikTheme {
-        Greeting("Android")
+    val recipeViewModel: RecipeViewModel = viewModel(factory = viewModelFactory {
+        initializer { RecipeViewModel(db.recipeDao()) }
+    })
+
+    NavHost(
+        navController = navigationController,
+        startDestination = Screens.HOME.title,
+        modifier = Modifier
+            .padding(innerPadding)
+            .fillMaxSize(),
+    ) {
+        composable(Screens.HOME.title) {
+            HomeScreen(
+                recipeViewModel = recipeViewModel,
+                onClick = { navigationController.navigate(Screens.DETAILS.title) }
+            )
+        }
+
     }
 }
