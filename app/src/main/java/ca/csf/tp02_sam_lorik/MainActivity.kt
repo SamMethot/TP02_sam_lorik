@@ -18,6 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ca.csf.tp02_sam_lorik.database.connectDatabase
+import ca.csf.tp02_sam_lorik.screens.DetailsScreen
 import ca.csf.tp02_sam_lorik.screens.HomeScreen
 import ca.csf.tp02_sam_lorik.screens.Screens
 import ca.csf.tp02_sam_lorik.ui.theme.TP02_sam_lorikTheme
@@ -59,6 +60,13 @@ fun Navigation(innerPadding : PaddingValues) {
             HomeScreen(
                 recipeViewModel = recipeViewModel,
                 onClick = { navigationController.navigate(Screens.DETAILS.title) }
+            )
+        }
+
+        composable(Screens.DETAILS.title) {
+            DetailsScreen(
+                recipeViewModel = recipeViewModel,
+                onLike = { /* TODO */ },
             )
         }
 

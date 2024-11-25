@@ -13,13 +13,13 @@ import kotlinx.coroutines.launch
 
 class RecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
 
-    val randomRecipes: List<Recipe>? = generateRandom()
-    var recipes: List<Recipe>? = null
+    var recipes by mutableStateOf<List<Recipe>>(emptyList())
+        private set
     var isLoading: Boolean by mutableStateOf(false)
 
     init {
         refresh()
-        generateRandom()
+        generateRandomRecipes()
     }
 
     private fun refresh() {
@@ -30,8 +30,11 @@ class RecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
         }
     }
 
-    fun generateRandom () : List<Recipe>? {
-        recipes = recipes?.shuffled()
-        return recipes?.take(10)
+    fun generateRandomRecipes(): List<Recipe> {
+        return recipes.shuffled().take(10)
+    }
+
+    fun likeRecipe() {
+
     }
 }
