@@ -13,6 +13,6 @@ interface RecipeDao {
     fun getAll(): Flow<List<Recipe>>
 
     @Insert
-    suspend fun insert(word: Recipe)
+    suspend fun insert(recipe: Recipe)
 
 }
