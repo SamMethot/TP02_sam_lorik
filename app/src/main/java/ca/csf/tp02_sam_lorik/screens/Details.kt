@@ -17,7 +17,7 @@ import ca.csf.tp02_sam_lorik.viewModel.RecipeViewModel
 import coil.compose.rememberImagePainter
 
 @Composable
-fun DetailsScreen(recipeId: Int, onLike: (Recipe) -> Unit, recipeViewModel: RecipeViewModel) {
+fun DetailsScreen(recipe: Recipe, onLike: (Recipe) -> Unit, recipeViewModel: RecipeViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -34,7 +34,7 @@ fun DetailsScreen(recipeId: Int, onLike: (Recipe) -> Unit, recipeViewModel: Reci
         )
 
         Image(
-            painter = rememberImagePainter(data = recipeViewModel.findRecipeById(recipeId).image),
+            painter = rememberImagePainter(data = recipe.image),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
@@ -48,7 +48,7 @@ fun DetailsScreen(recipeId: Int, onLike: (Recipe) -> Unit, recipeViewModel: Reci
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
-        recipeViewModel.findRecipeById(recipeId).ingredients.split(", ").forEach {
+        recipe.ingredients.split(", ").forEach {
             Text(
                 text = "- $it",
                 fontSize = 16.sp,

@@ -17,6 +17,7 @@ class RecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
     var recipes by mutableStateOf<List<Recipe>>(emptyList())
         private set
     var isLoading: Boolean by mutableStateOf(false)
+
     private var favoriteRecipes by mutableStateOf<List<Recipe>>(emptyList())
 
     init {
@@ -58,14 +59,5 @@ class RecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
 
     fun isFavorite(recipe: Recipe): Boolean {
         return favoriteRecipes.contains(recipe)
-    }
-
-    fun findRecipeById(id: Int): Recipe {
-        for (recipe in recipes) {
-            if (recipe.id == id) {
-                return recipe
-            }
-        }
-        return Recipe("", "", "")
     }
 }

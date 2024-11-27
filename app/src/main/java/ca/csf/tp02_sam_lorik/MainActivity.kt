@@ -23,6 +23,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ca.csf.tp02_sam_lorik.database.connectDatabase
+import ca.csf.tp02_sam_lorik.model.Recipe
 import ca.csf.tp02_sam_lorik.screens.DetailsScreen
 import ca.csf.tp02_sam_lorik.screens.HomeScreen
 import ca.csf.tp02_sam_lorik.screens.Screens
@@ -54,7 +55,7 @@ fun Navigation(innerPadding : PaddingValues) {
         initializer { RecipeViewModel(db.recipeDao()) }
     })
 
-    var recipeId by rememberSaveable { mutableIntStateOf(0) }
+    var recipe : Recipe = Recipe("", "", "")
 
 
     NavHost(
@@ -68,7 +69,7 @@ fun Navigation(innerPadding : PaddingValues) {
             HomeScreen(
                 recipeViewModel = recipeViewModel,
                 onClick = {
-                    recipeId = it
+                    recipe = it
                     navigationController.navigate(Screens.DETAILS.title)
                 }
             )
@@ -78,7 +79,7 @@ fun Navigation(innerPadding : PaddingValues) {
             DetailsScreen(
                 recipeViewModel = recipeViewModel,
                 onLike = { /* TODO */ },
-                recipeId = recipeId
+                recipe = recipe
             )
         }
 

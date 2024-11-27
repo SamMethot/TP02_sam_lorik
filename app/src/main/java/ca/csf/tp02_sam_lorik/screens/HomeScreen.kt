@@ -38,7 +38,7 @@ import ca.csf.tp02_sam_lorik.viewModel.RecipeViewModel
 import coil.compose.rememberImagePainter
 
 @Composable
-fun HomeScreen(recipeViewModel: RecipeViewModel, onClick: (Int) -> Unit) {
+fun HomeScreen(recipeViewModel: RecipeViewModel, onClick: (Recipe) -> Unit) {
     val recipes = recipeViewModel.recipes
     val isLoading = recipeViewModel.isLoading
 
@@ -106,7 +106,7 @@ fun HomeScreen(recipeViewModel: RecipeViewModel, onClick: (Int) -> Unit) {
                 items(recipes) { recipe ->
                     RecipeItem(
                         recipe = recipe,
-                        onClick = { onClick(recipe.id) },
+                        onClick = { onClick(recipe) },
                         recipeViewModel = recipeViewModel
                     )
                 }
@@ -116,13 +116,13 @@ fun HomeScreen(recipeViewModel: RecipeViewModel, onClick: (Int) -> Unit) {
 }
 
 @Composable
-fun RecipeItem(recipe: Recipe, onClick: (Int) -> Unit, recipeViewModel: RecipeViewModel) {
+fun RecipeItem(recipe: Recipe, onClick: (Recipe) -> Unit, recipeViewModel: RecipeViewModel) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(1f)
             .clip(RoundedCornerShape(16.dp))
-            .clickable { onClick(recipe.id) }
+            .clickable { onClick(recipe) }
     ) {
         val imagePainter = rememberImagePainter(recipe.image)
         Image(
