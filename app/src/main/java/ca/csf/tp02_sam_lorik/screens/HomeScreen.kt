@@ -5,10 +5,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -40,25 +42,36 @@ fun HomeScreen(recipeViewModel: RecipeViewModel, onClick: (Recipe) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_launcher_round),
-            contentDescription = stringResource(R.string.app_icon),
-        )
-        Text(
-            text = "HOMEPAGE",
-            fontSize = 24.sp,
-            color = Color.Black,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        )
+            .padding(16.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.appicon),
+                contentDescription = stringResource(R.string.app_icon),
+                modifier = Modifier
+                    .padding(end = 8.dp, bottom = 16.dp)
+                    .size(80.dp)
+            )
+            Text(
+                text = "HOMEPAGE",
+                fontSize = 24.sp,
+                color = Color.Black,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+            )
+        }
         TextField(
             value = "",
             onValueChange = {},
-            label = { Text("Search") },
-            modifier = Modifier.fillMaxWidth()
+            label = { Text(stringResource(R.string.search)) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp)
         )
 
         if (isLoading) {
@@ -86,12 +99,11 @@ fun HomeScreen(recipeViewModel: RecipeViewModel, onClick: (Recipe) -> Unit) {
                         val imagePainter = rememberImagePainter(recipe.image)
                         Image(
                             painter = imagePainter,
-                            contentDescription = "Recipe Image",
+                            contentDescription = context.getString(R.string.recipe_image),
                             modifier = Modifier
                                 .fillMaxSize()
                                 .alpha(0.8f),
                             contentScale = androidx.compose.ui.layout.ContentScale.Crop,
-                            //placeholder = null
                         )
 
                         Text(
