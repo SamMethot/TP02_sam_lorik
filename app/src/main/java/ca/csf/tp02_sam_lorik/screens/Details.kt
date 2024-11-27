@@ -17,13 +17,13 @@ import ca.csf.tp02_sam_lorik.viewModel.RecipeViewModel
 import coil.compose.rememberImagePainter
 
 @Composable
-fun DetailsScreen(recipeViewModel: RecipeViewModel, onLike: (Recipe) -> Unit) {
+fun DetailsScreen(recipeId: Int, onLike: (Recipe) -> Unit, recipeViewModel: RecipeViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text( // Mettre le text dans un fonction composable pour ne pas répéter le code
+        Text(
             text = "DETAILS",
             fontSize = 24.sp,
             color = Color.Black,
@@ -34,9 +34,27 @@ fun DetailsScreen(recipeViewModel: RecipeViewModel, onLike: (Recipe) -> Unit) {
         )
 
         Image(
-            painter = rememberImagePainter(data = recipeViewModel.recipes[0].image),
+            painter = rememberImagePainter(data = recipeViewModel.findRecipeById(recipeId).image),
             contentDescription = null,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp)
         )
+
+        Text(
+            text = "Ingredients:",
+            fontSize = 20.sp,
+            color = Color.Black,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+
+        recipeViewModel.findRecipeById(recipeId).ingredients.split(", ").forEach {
+            Text(
+                text = "- $it",
+                fontSize = 16.sp,
+                color = Color.Gray,
+                modifier = Modifier.padding(start = 16.dp, bottom = 4.dp)
+            )
+        }
     }
 }

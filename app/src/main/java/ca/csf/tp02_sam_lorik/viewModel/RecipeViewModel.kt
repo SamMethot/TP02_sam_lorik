@@ -10,7 +10,6 @@ import ca.csf.tp02_sam_lorik.model.Recipe
 import ca.csf.tp02_sam_lorik.service.RecipeService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 
 class RecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
@@ -23,6 +22,7 @@ class RecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
     init {
         refresh()
         generateRandomRecipes()
+        loadFavorites()
     }
 
     private fun refresh() {
@@ -50,11 +50,22 @@ class RecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
 
     private fun loadFavorites() {
         viewModelScope.launch(Dispatchers.IO) {
-            favoriteRecipes = recipeDao.getAll().first()
+            recipeDao.getAll().collect { favoriteList ->
+                favoriteRecipes = favoriteList
+            }
         }
     }
 
     fun isFavorite(recipe: Recipe): Boolean {
         return favoriteRecipes.contains(recipe)
+    }
+
+    fun findRecipeById(id: Int): Recipe {
+        for (recipe in recipes) {
+            if (recipe.id == id) {
+                return recipe
+            }
+        }
+        return Recipe("", "", "")
     }
 }

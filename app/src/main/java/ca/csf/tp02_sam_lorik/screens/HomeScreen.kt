@@ -38,7 +38,7 @@ import ca.csf.tp02_sam_lorik.viewModel.RecipeViewModel
 import coil.compose.rememberImagePainter
 
 @Composable
-fun HomeScreen(recipeViewModel: RecipeViewModel, onClick: (Recipe) -> Unit) {
+fun HomeScreen(recipeViewModel: RecipeViewModel, onClick: (Int) -> Unit) {
     val recipes = recipeViewModel.recipes
     val isLoading = recipeViewModel.isLoading
 
@@ -104,51 +104,60 @@ fun HomeScreen(recipeViewModel: RecipeViewModel, onClick: (Recipe) -> Unit) {
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(recipes) { recipe ->
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(1f)
-                            .clip(RoundedCornerShape(16.dp))
-                            .clickable { onClick(recipe) }
-                    ) {
-                        val imagePainter = rememberImagePainter(recipe.image)
-                        Image(
-                            painter = imagePainter,
-                            contentDescription = stringResource(R.string.recipe_image),
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .alpha(0.8f),
-                            contentScale = androidx.compose.ui.layout.ContentScale.Crop,
-                        )
-
-                        Text(
-                            text = recipe.name,
-                            modifier = Modifier.align(Alignment.Center),
-                            color = Color.White,
-                            fontSize = 16.sp,
-                            textAlign = TextAlign.Center
-                        )
-
-                        IconButton(
-                            onClick = {
-                                recipeViewModel.toggleFavorite(recipe)
-                            },
-                            modifier = Modifier
-                                .align(Alignment.TopEnd)
-                                .padding(8.dp)
-                        ) {
-                            Icon(
-                                painter = painterResource(
-                                    id = if (recipeViewModel.isFavorite(recipe)) R.drawable.heart_filled
-                                    else R.drawable.heart_outline
-                                ),
-                                contentDescription = stringResource(R.string.favorite_button),
-                                tint = if (recipeViewModel.isFavorite(recipe)) Color.Red else Color.White
-                            )
-                        }
-                    }
+                    RecipeItem(
+                        recipe = recipe,
+                        onClick = { onClick(recipe.id) },
+                        recipeViewModel = recipeViewModel
+                    )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun RecipeItem(recipe: Recipe, onClick: (Int) -> Unit, recipeViewModel: RecipeViewModel) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(1f)
+            .clip(RoundedCornerShape(16.dp))
+            .clickable { onClick(recipe.id) }
+    ) {
+        val imagePainter = rememberImagePainter(recipe.image)
+        Image(
+            painter = imagePainter,
+            contentDescription = stringResource(R.string.recipe_image),
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(0.8f),
+            contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+        )
+
+        Text(
+            text = recipe.name,
+            modifier = Modifier.align(Alignment.Center),
+            color = Color.White,
+            fontSize = 16.sp,
+            textAlign = TextAlign.Center
+        )
+
+        IconButton(
+            onClick = {
+                recipeViewModel.toggleFavorite(recipe)
+            },
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(8.dp)
+        ) {
+            Icon(
+                painter = painterResource(
+                    id = if (recipeViewModel.isFavorite(recipe)) R.drawable.heart_filled
+                    else R.drawable.heart_outline
+                ),
+                contentDescription = stringResource(R.string.favorite_button),
+                tint = if (recipeViewModel.isFavorite(recipe)) Color.Red else Color.White
+            )
         }
     }
 }

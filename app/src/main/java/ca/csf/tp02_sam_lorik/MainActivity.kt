@@ -9,6 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -49,6 +54,9 @@ fun Navigation(innerPadding : PaddingValues) {
         initializer { RecipeViewModel(db.recipeDao()) }
     })
 
+    var recipeId by rememberSaveable { mutableIntStateOf(0) }
+
+
     NavHost(
         navController = navigationController,
         startDestination = Screens.HOME.title,
@@ -59,7 +67,10 @@ fun Navigation(innerPadding : PaddingValues) {
         composable(Screens.HOME.title) {
             HomeScreen(
                 recipeViewModel = recipeViewModel,
-                onClick = { navigationController.navigate(Screens.DETAILS.title) }
+                onClick = {
+                    recipeId = it
+                    navigationController.navigate(Screens.DETAILS.title)
+                }
             )
         }
 
@@ -67,6 +78,7 @@ fun Navigation(innerPadding : PaddingValues) {
             DetailsScreen(
                 recipeViewModel = recipeViewModel,
                 onLike = { /* TODO */ },
+                recipeId = recipeId
             )
         }
 
