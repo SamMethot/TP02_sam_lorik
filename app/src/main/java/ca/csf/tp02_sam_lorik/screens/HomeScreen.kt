@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +17,8 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -43,11 +46,30 @@ fun HomeScreen(recipeViewModel: RecipeViewModel, onClick: (Recipe) -> Unit) {
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
+
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
+
+
+            Image(
+                painter = painterResource(id = R.drawable.appicon),
+                contentDescription = stringResource(R.string.app_icon),
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .size(80.dp)
+            )
+
+            Text(
+                text = "HOMEPAGE",
+                fontSize = 24.sp,
+                color = Color.Black,
+                textAlign = TextAlign.Center
+            )
+
             Image(
                 painter = painterResource(id = R.drawable.appicon),
                 contentDescription = stringResource(R.string.app_icon),
@@ -55,16 +77,9 @@ fun HomeScreen(recipeViewModel: RecipeViewModel, onClick: (Recipe) -> Unit) {
                     .padding(end = 8.dp, bottom = 16.dp)
                     .size(80.dp)
             )
-            Text(
-                text = "HOMEPAGE",
-                fontSize = 24.sp,
-                color = Color.Black,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp)
-            )
+
         }
+
         TextField(
             value = "",
             onValueChange = {},
@@ -99,7 +114,7 @@ fun HomeScreen(recipeViewModel: RecipeViewModel, onClick: (Recipe) -> Unit) {
                         val imagePainter = rememberImagePainter(recipe.image)
                         Image(
                             painter = imagePainter,
-                            contentDescription = context.getString(R.string.recipe_image),
+                            contentDescription = stringResource(R.string.recipe_image),
                             modifier = Modifier
                                 .fillMaxSize()
                                 .alpha(0.8f),
@@ -113,6 +128,24 @@ fun HomeScreen(recipeViewModel: RecipeViewModel, onClick: (Recipe) -> Unit) {
                             fontSize = 16.sp,
                             textAlign = TextAlign.Center
                         )
+
+                        IconButton(
+                            onClick = {
+                                recipeViewModel.toggleFavorite(recipe)
+                            },
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .padding(8.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(
+                                    id = if (recipeViewModel.isFavorite(recipe)) R.drawable.heart_filled
+                                    else R.drawable.heart_outline
+                                ),
+                                contentDescription = stringResource(R.string.favorite_button),
+                                tint = if (recipeViewModel.isFavorite(recipe)) Color.Red else Color.White
+                            )
+                        }
                     }
                 }
             }

@@ -9,6 +9,8 @@ import ca.csf.tp02_sam_lorik.database.RecipeDao
 import ca.csf.tp02_sam_lorik.model.Recipe
 import ca.csf.tp02_sam_lorik.service.RecipeService
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 
 class RecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
@@ -16,6 +18,7 @@ class RecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
     var recipes by mutableStateOf<List<Recipe>>(emptyList())
         private set
     var isLoading: Boolean by mutableStateOf(false)
+    private var favoriteRecipes by mutableStateOf<List<Recipe>>(emptyList())
 
     init {
         refresh()
@@ -34,7 +37,24 @@ class RecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
         return recipes.shuffled().take(10)
     }
 
-    fun likeRecipe() {
+    fun toggleFavorite(recipe: Recipe) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (favoriteRecipes.contains(recipe)) {
+                recipeDao.remove(recipe)
+            } else {
+                recipeDao.insert(recipe)
+            }
+            loadFavorites()
+        }
+    }
 
+    private fun loadFavorites() {
+        viewModelScope.launch(Dispatchers.IO) {
+            favoriteRecipes = recipeDao.getAll().first()
+        }
+    }
+
+    fun isFavorite(recipe: Recipe): Boolean {
+        return favoriteRecipes.contains(recipe)
     }
 }

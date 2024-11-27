@@ -1,6 +1,7 @@
 package ca.csf.tp02_sam_lorik.database
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import ca.csf.tp02_sam_lorik.model.Recipe
@@ -15,4 +16,6 @@ interface RecipeDao {
     @Insert
     suspend fun insert(recipe: Recipe)
 
+    @Delete
+    suspend fun remove(recipe: Recipe)
 }
