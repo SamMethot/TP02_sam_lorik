@@ -15,15 +15,19 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ca.csf.tp02_sam_lorik.R
 import ca.csf.tp02_sam_lorik.model.Recipe
 import ca.csf.tp02_sam_lorik.viewModel.RecipeViewModel
 import coil.compose.rememberImagePainter
@@ -33,9 +37,14 @@ fun HomeScreen(recipeViewModel: RecipeViewModel, onClick: (Recipe) -> Unit) {
     val recipes = recipeViewModel.recipes
     val isLoading = recipeViewModel.isLoading
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_launcher_round),
+            contentDescription = stringResource(R.string.app_icon),
+        )
         Text(
             text = "HOMEPAGE",
             fontSize = 24.sp,
@@ -44,6 +53,12 @@ fun HomeScreen(recipeViewModel: RecipeViewModel, onClick: (Recipe) -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
+        )
+        TextField(
+            value = "",
+            onValueChange = {},
+            label = { Text("Search") },
+            modifier = Modifier.fillMaxWidth()
         )
 
         if (isLoading) {
@@ -75,7 +90,8 @@ fun HomeScreen(recipeViewModel: RecipeViewModel, onClick: (Recipe) -> Unit) {
                             modifier = Modifier
                                 .fillMaxSize()
                                 .alpha(0.8f),
-                            contentScale = androidx.compose.ui.layout.ContentScale.Crop
+                            contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                            //placeholder = null
                         )
 
                         Text(

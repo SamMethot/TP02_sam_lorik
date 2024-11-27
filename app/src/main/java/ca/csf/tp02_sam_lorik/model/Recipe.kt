@@ -16,30 +16,21 @@ data class Recipe(
     companion object {
         fun fromJson(json: String): List<Recipe> {
             val recipeJson = JSONObject(json)
-            val recipesJson = recipeJson.getJSONArray("recipes")
+            val recipesArray = recipeJson.getJSONArray("recipes")
             val recipes = mutableListOf<Recipe>()
-            val ingredientNames = mutableListOf<String>()
-            var ingredient: JSONObject?
 
-            for (i in 0 until recipesJson.length()) {
-                val recipe = recipesJson.getJSONObject(i)
+            for (i in 0 until recipesArray.length()) {
+                val recipe = recipesArray.getJSONObject(i)
                 val name = recipe.getString("title")
-                val image = recipe.getString("image")
-                val analyzedInstruction = recipe.getJSONArray("analyzedInstructions")
-                for (j in 0 until analyzedInstruction.length()) {
-                    val instruction = analyzedInstruction.getJSONObject(j)
-                    val steps = instruction.getJSONArray("steps")
-                    for (k in 0 until steps.length()) {
-                        val step = steps.getJSONObject(k)
-                        val ingredients = step.getJSONArray("ingredients")
-                        for (l in 0 until ingredients.length()) {
-                            ingredient = ingredients.getJSONObject(l)
-                            ingredientNames.add(ingredient.getString("name"))
-                        }
-                    }
+                val ingredientsJsonArray = recipe.getJSONArray("extendedIngredients")
+                val ingredients = mutableListOf<String>()
+                for (j in 0 until ingredientsJsonArray.length()) {
+                    val ingredient = ingredientsJsonArray.getJSONObject(j)
+                    ingredients.add(ingredient.getString("original"))
                 }
-                val ingredients = ingredientNames.joinToString(", ")
-                recipes.add(Recipe(name, ingredients, image))
+                val ingredientsString = ingredients.joinToString(", ")
+                val image = recipe.optString("image", "")
+                recipes.add(Recipe(name, ingredientsString, image))
             }
             return recipes
         }
