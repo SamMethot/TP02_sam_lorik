@@ -23,7 +23,7 @@ class RecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
     init {
         refresh()
         generateRandomRecipes()
-        loadFavorites()
+        //loadFavorites()
     }
 
     private fun refresh() {
@@ -42,10 +42,13 @@ class RecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             if (favoriteRecipes.contains(recipe)) {
                 recipeDao.remove(recipe)
+                favoriteRecipes = favoriteRecipes.filter { it.id != recipe.id }
+
             } else {
                 recipeDao.insert(recipe)
+                favoriteRecipes = favoriteRecipes + recipe
             }
-            loadFavorites()
+            //loadFavorites()
         }
     }
 
