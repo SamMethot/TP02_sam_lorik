@@ -25,6 +25,7 @@ import androidx.navigation.compose.rememberNavController
 import ca.csf.tp02_sam_lorik.database.connectDatabase
 import ca.csf.tp02_sam_lorik.model.Recipe
 import ca.csf.tp02_sam_lorik.screens.DetailsScreen
+import ca.csf.tp02_sam_lorik.screens.FavoritiesScreen
 import ca.csf.tp02_sam_lorik.screens.HomeScreen
 import ca.csf.tp02_sam_lorik.screens.Screens
 import ca.csf.tp02_sam_lorik.ui.theme.TP02_sam_lorikTheme
@@ -55,7 +56,7 @@ fun Navigation(innerPadding : PaddingValues) {
         initializer { RecipeViewModel(db.recipeDao()) }
     })
 
-    var recipe : Recipe = Recipe("", "", "")
+    var recipe = Recipe("", "", "")
 
 
     NavHost(
@@ -71,15 +72,22 @@ fun Navigation(innerPadding : PaddingValues) {
                 onClick = {
                     recipe = it
                     navigationController.navigate(Screens.DETAILS.title)
-                }
+                },
+                onLike = { navigationController.navigate(Screens.FAVORITES.title) }
             )
         }
 
         composable(Screens.DETAILS.title) {
             DetailsScreen(
-                recipeViewModel = recipeViewModel,
-                onLike = { /* TODO */ },
+                onLike = { navigationController.navigate(Screens.FAVORITES.title) },
+                onBack = { navigationController.popBackStack() },
                 recipe = recipe
+            )
+        }
+
+        composable(Screens.FAVORITES.title) {
+            FavoritiesScreen(
+                onBack = { navigationController.popBackStack() }
             )
         }
 

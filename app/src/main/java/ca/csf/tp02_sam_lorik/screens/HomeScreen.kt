@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,7 +37,7 @@ import ca.csf.tp02_sam_lorik.viewModel.RecipeViewModel
 import coil.compose.rememberImagePainter
 
 @Composable
-fun HomeScreen(recipeViewModel: RecipeViewModel, onClick: (Recipe) -> Unit) {
+fun HomeScreen(recipeViewModel: RecipeViewModel, onClick: (Recipe) -> Unit, onLike: () -> Unit) {
     val recipes = recipeViewModel.recipes
     val isLoading = recipeViewModel.isLoading
 
@@ -56,7 +55,7 @@ fun HomeScreen(recipeViewModel: RecipeViewModel, onClick: (Recipe) -> Unit) {
 
 
             Image(
-                painter = painterResource(id = R.drawable.appicon),
+                painter = painterResource(id = R.drawable.appicon), // Image fait avec ChatGPT
                 contentDescription = stringResource(R.string.app_icon),
                 modifier = Modifier
                     .padding(bottom = 16.dp)
@@ -71,11 +70,12 @@ fun HomeScreen(recipeViewModel: RecipeViewModel, onClick: (Recipe) -> Unit) {
             )
 
             Image(
-                painter = painterResource(id = R.drawable.appicon),
+                painter = painterResource(id = R.drawable.heart_filled),
                 contentDescription = stringResource(R.string.app_icon),
                 modifier = Modifier
-                    .padding(end = 8.dp, bottom = 16.dp)
-                    .size(80.dp)
+                    .padding(end = 8.dp)
+                    .size(40.dp)
+                    .clickable { onLike() }
             )
 
         }
