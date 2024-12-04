@@ -5,8 +5,11 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 object RecipeService {
-    private const val API_URL =
-        "https://api.spoonacular.com/recipes/random?number=10&apiKey=167769ea95324c128dbe7dd51d08f420"
+    private const val API_URL = "https://api.spoonacular.com/recipes/random?number=10&apiKey=164f2c05e9e4423bb7b25b932c4ad8ce"
+
+    fun getSearchApiUrl(ingredients: String): String {
+        return "https://api.spoonacular.com/recipes/findByIngredients?ingredients=$ingredients&number=10&apiKey=164f2c05e9e4423bb7b25b932c4ad8ce"
+    }
 
     fun fetchRecipes(): List<Recipe> {
         val url = URL(API_URL)
@@ -17,5 +20,20 @@ object RecipeService {
             inputStream.bufferedReader().readText()
         }
         return Recipe.fromJson(data)
+    }
+
+    fun fetchRecipesByIngredients(ingredients: String): List<Recipe> {
+        return if (ingredients.isEmpty()) {
+            fetchRecipes()
+        } else {
+            val url = URL(getSearchApiUrl(ingredients))
+            val connection = url.openConnection() as HttpURLConnection
+
+            val data = connection.run {
+                requestMethod = "GET"
+                inputStream.bufferedReader().readText()
+            }
+            Recipe.fromJsonAlternative(data)
+        }
     }
 }

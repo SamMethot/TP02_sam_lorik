@@ -9,7 +9,6 @@ import ca.csf.tp02_sam_lorik.database.RecipeDao
 import ca.csf.tp02_sam_lorik.model.Recipe
 import ca.csf.tp02_sam_lorik.service.RecipeService
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class RecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
@@ -18,49 +17,76 @@ class RecipeViewModel(private val recipeDao: RecipeDao) : ViewModel() {
         private set
     var isLoading: Boolean by mutableStateOf(false)
 
-    private var favoriteRecipes by mutableStateOf<List<Recipe>>(emptyList())
+    private val favoriteRecipeIds = mutableStateOf<Set<Int>>(emptySet())
+
+    var favorites by mutableStateOf<List<Recipe>>(emptyList())
+        private set
+
+    var searchQuery by mutableStateOf("")
 
     init {
         refresh()
-        generateRandomRecipes()
-        //loadFavorites()
+        loadFavorites()
     }
 
     private fun refresh() {
         isLoading = true
         viewModelScope.launch(Dispatchers.IO) {
-            recipes = RecipeService.fetchRecipes()
+            val fetchedRecipes = RecipeService.fetchRecipes()
+            recipes = fetchedRecipes
             isLoading = false
         }
     }
 
-    fun generateRandomRecipes(): List<Recipe> {
-        return recipes.shuffled().take(10)
+    fun toggleFavorite(recipe: Recipe) {
+        val isCurrentlyFavorite = isFavorite(recipe)
+        if (isCurrentlyFavorite) {
+            favoriteRecipeIds.value -= recipe.id
+            removeFavorite(recipe)
+        } else {
+            favoriteRecipeIds.value += recipe.id
+            addFavorite(recipe)
+        }
     }
 
-    fun toggleFavorite(recipe: Recipe) {
+    private fun addFavorite(recipe: Recipe) {
         viewModelScope.launch(Dispatchers.IO) {
-            if (favoriteRecipes.contains(recipe)) {
-                recipeDao.remove(recipe)
-                favoriteRecipes = favoriteRecipes.filter { it.id != recipe.id }
+            recipeDao.insert(recipe)
+            loadFavorites()
+        }
+    }
 
-            } else {
-                recipeDao.insert(recipe)
-                favoriteRecipes = favoriteRecipes + recipe
-            }
-            //loadFavorites()
+    fun removeFavorite(recipe: Recipe) {
+        viewModelScope.launch(Dispatchers.IO) {
+            recipeDao.remove(recipe)
+            loadFavorites()
         }
     }
 
     private fun loadFavorites() {
         viewModelScope.launch(Dispatchers.IO) {
             recipeDao.getAll().collect { favoriteList ->
-                favoriteRecipes = favoriteList
+                favorites = favoriteList
+                favoriteRecipeIds.value = favoriteList.map { it.id }.toSet()
             }
         }
     }
 
     fun isFavorite(recipe: Recipe): Boolean {
-        return favoriteRecipes.contains(recipe)
+        return favoriteRecipeIds.value.contains(recipe.id)
+    }
+
+    fun updateSearchQuery() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val filteredRecipes = RecipeService.fetchRecipesByIngredients(searchQuery)
+            recipes = filteredRecipes
+        }
+    }
+
+    fun removeAllFavorites() {
+        viewModelScope.launch(Dispatchers.IO) {
+            recipeDao.clearFavorites()
+            favorites = emptyList()
+        }
     }
 }

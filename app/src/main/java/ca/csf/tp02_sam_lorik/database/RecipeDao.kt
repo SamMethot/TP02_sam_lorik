@@ -18,4 +18,7 @@ interface RecipeDao {
 
     @Delete
     suspend fun remove(recipe: Recipe)
+
+    @Query("DELETE FROM Recipe")
+    suspend fun clearFavorites()
 }

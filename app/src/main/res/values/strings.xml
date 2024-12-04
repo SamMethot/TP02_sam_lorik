@@ -2,8 +2,18 @@
     <string name="app_name">TP02_sam_lorik</string>
     <string name="app_icon">App Icon</string>
     <string name="search">Search</string>
-    <string name="recipe_image">Recipe Image</string>
+    <string name="recipe_image">Recipe image</string>
     <string name="favorite_button">Favorite button</string>
     <string name="back_button">Retour en arrière</string>
     <string name="like_button">Image des recette</string>
+    <string name="favorites">FAVORITES</string>
+    <string name="remove_favorite">Remove favorite image\n</string>
+    <string name="ingredients">Ingredients:</string>
+    <string name="details">DETAILS</string>
+    <string name="delete_all">Remove all image</string>
+    <string name="nothing_found">ERROR 404 : Nothing found !</string>
+    <string name="view">View</string>
+    <string name="delete">Delete</string>
+    <string name="homepage">HOMEPAGE</string>
+    <string name="search_icon">Search image</string>
 </resources>

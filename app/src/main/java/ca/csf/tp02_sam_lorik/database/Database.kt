@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import ca.csf.tp02_sam_lorik.model.Recipe
 
-@Database(entities = [Recipe::class], version = 2, exportSchema = false)
+@Database(entities = [Recipe::class], version = 50, exportSchema = false)
 abstract class AppDatabase : RoomDatabase()  {
     abstract fun recipeDao(): RecipeDao
 }
@@ -14,6 +14,6 @@ abstract class AppDatabase : RoomDatabase()  {
 fun connectDatabase(applicationContext: Context): AppDatabase {
     return Room.databaseBuilder(
         applicationContext,
-        AppDatabase::class.java, "examen-database"
+        AppDatabase::class.java, "efcs-database"
     ).fallbackToDestructiveMigration().build()
 }
