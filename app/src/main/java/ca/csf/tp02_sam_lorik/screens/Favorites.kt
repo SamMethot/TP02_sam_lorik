@@ -1,4 +1,3 @@
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,7 +13,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,11 +28,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ca.csf.tp02_sam_lorik.R
 import ca.csf.tp02_sam_lorik.model.Recipe
+import ca.csf.tp02_sam_lorik.screens.CustomIcon
+import ca.csf.tp02_sam_lorik.screens.CustomIconVector
+import ca.csf.tp02_sam_lorik.screens.CustomText
+import ca.csf.tp02_sam_lorik.screens.CustomImage
 import ca.csf.tp02_sam_lorik.viewModel.RecipeViewModel
 import coil.compose.rememberImagePainter
 
 @Composable
-fun FavoritesScreen(recipeViewModel: RecipeViewModel, onBack: () -> Unit, onView: (Recipe) -> Unit) {
+fun FavoritesScreen(
+    recipeViewModel: RecipeViewModel,
+    onBack: () -> Unit,
+    onView: (Recipe) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -51,11 +57,11 @@ fun FavoritesScreen(recipeViewModel: RecipeViewModel, onBack: () -> Unit, onView
                 onClick = { onBack() },
                 modifier = Modifier.padding(bottom = 16.dp, top = 16.dp)
             ) {
-                Icon(
+                CustomIcon(
                     painter = painterResource(id = R.drawable.ic_arrow_back),
                     contentDescription = stringResource(R.string.back_button),
                     tint = Color.White,
-                    modifier = Modifier.size(80.dp)
+                    modifier = Modifier.size(80.dp),
                 )
             }
 
@@ -71,7 +77,7 @@ fun FavoritesScreen(recipeViewModel: RecipeViewModel, onBack: () -> Unit, onView
                 onClick = { recipeViewModel.removeAllFavorites() },
                 modifier = Modifier.padding(bottom = 16.dp, top = 16.dp)
             ) {
-                Icon(
+                CustomIconVector(
                     imageVector = Icons.Default.Delete,
                     contentDescription = stringResource(R.string.delete_all),
                     modifier = Modifier.size(40.dp),
@@ -114,18 +120,18 @@ fun FavoriteItem(recipe: Recipe, onView: () -> Unit, onDelete: () -> Unit) {
             Box(
                 modifier = Modifier.size(80.dp)
             ) {
-                Image(
+                CustomImage(
                     painter = imagePainter,
                     contentDescription = stringResource(R.string.recipe_image),
                     modifier = Modifier.fillMaxSize()
                 )
             }
 
-            Text(
-                text = recipe.name,
-                fontSize = 20.sp,
-                color = Color.White,
-                modifier = Modifier.padding(start = 16.dp)
+            CustomText(
+                recipe.name,
+                20.sp,
+                Color.White,
+                Modifier.padding(start = 16.dp)
             )
         }
 

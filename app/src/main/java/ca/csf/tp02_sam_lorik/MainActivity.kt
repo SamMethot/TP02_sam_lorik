@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Navigation(
                         innerPadding = innerPadding
-                   )
+                    )
                 }
             }
         }
@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Navigation(innerPadding : PaddingValues) {
+fun Navigation(innerPadding: PaddingValues) {
     val navigationController = rememberNavController()
     val db = connectDatabase(applicationContext = LocalContext.current)
 

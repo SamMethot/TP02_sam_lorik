@@ -16,9 +16,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -35,7 +33,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ca.csf.tp02_sam_lorik.R
@@ -61,7 +58,7 @@ fun HomeScreen(recipeViewModel: RecipeViewModel, onClick: (Recipe) -> Unit, onLi
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Image(
+            CustomImage(
                 painter = painterResource(id = R.drawable.appicon),
                 contentDescription = stringResource(R.string.app_icon),
                 modifier = Modifier
@@ -69,14 +66,14 @@ fun HomeScreen(recipeViewModel: RecipeViewModel, onClick: (Recipe) -> Unit, onLi
                     .size(80.dp)
             )
 
-            Text(
-                text = stringResource(R.string.homepage),
-                fontSize = 24.sp,
-                color = Color.White,
-                textAlign = TextAlign.Center
+            CustomText(
+                stringResource(R.string.homepage),
+                24.sp,
+                Color.White,
+                Modifier
             )
 
-            Image(
+            CustomImage(
                 painter = painterResource(id = R.drawable.heart_filled),
                 contentDescription = stringResource(R.string.app_icon),
                 modifier = Modifier
@@ -99,10 +96,11 @@ fun HomeScreen(recipeViewModel: RecipeViewModel, onClick: (Recipe) -> Unit, onLi
                 label = { Text(stringResource(R.string.search)) },
                 trailingIcon = {
                     IconButton(onClick = { recipeViewModel.updateSearchQuery() }) {
-                        Icon(
+                        CustomIcon(
                             painter = painterResource(R.drawable.search),
                             contentDescription = stringResource(R.string.search_icon),
-                            modifier = Modifier.size(24.dp)
+                            tint = Color.Gray,
+                            modifier = Modifier.size(24.dp),
                         )
                     }
                 },
@@ -126,10 +124,11 @@ fun HomeScreen(recipeViewModel: RecipeViewModel, onClick: (Recipe) -> Unit, onLi
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = stringResource(R.string.nothing_found),
-                        fontSize = 25.sp,
-                        color = Color.Gray
+                    CustomText(
+                        stringResource(R.string.nothing_found),
+                        25.sp,
+                        Color.Gray,
+                        Modifier
                     )
                 }
             } else {
@@ -179,12 +178,11 @@ fun RecipeItem(recipe: Recipe, onClick: (Recipe) -> Unit, recipeViewModel: Recip
             contentScale = androidx.compose.ui.layout.ContentScale.Crop,
         )
 
-        Text(
-            text = recipe.name,
-            modifier = Modifier.align(Alignment.Center),
-            color = Color.White,
-            fontSize = 16.sp,
-            textAlign = TextAlign.Center
+        CustomText(
+            recipe.name,
+            16.sp,
+            Color.White,
+            Modifier.align(Alignment.Center)
         )
 
         IconButton(
@@ -196,13 +194,14 @@ fun RecipeItem(recipe: Recipe, onClick: (Recipe) -> Unit, recipeViewModel: Recip
                 .align(Alignment.TopEnd)
                 .padding(8.dp)
         ) {
-            Icon(
+            CustomIcon(
                 painter = painterResource(
                     id = if (isFavorite) R.drawable.heart_filled
                     else R.drawable.heart_outline
                 ),
                 contentDescription = stringResource(R.string.favorite_button),
-                tint = if (isFavorite) Color.Red else Color.White
+                tint = if (isFavorite) Color.Red else Color.White,
+                Modifier
             )
         }
     }

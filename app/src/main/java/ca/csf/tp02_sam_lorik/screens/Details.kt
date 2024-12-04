@@ -1,10 +1,7 @@
 package ca.csf.tp02_sam_lorik.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,9 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -69,21 +63,19 @@ fun DetailsScreen(
                 onClick = { onBack() },
                 modifier = Modifier.padding(bottom = 16.dp, top = 16.dp)
             ) {
-                Icon(
+                CustomIcon(
                     painter = painterResource(id = R.drawable.ic_arrow_back),
                     contentDescription = stringResource(R.string.back_button),
                     tint = Color.White,
                     modifier = Modifier
                         .size(80.dp)
-
                 )
             }
 
-            Text(
+            CustomText(
                 text = stringResource(R.string.details),
                 fontSize = 24.sp,
                 color = Color.White,
-                textAlign = TextAlign.Center,
                 modifier = Modifier
                     .padding(bottom = 16.dp, top = 16.dp)
             )
@@ -96,13 +88,14 @@ fun DetailsScreen(
                 modifier = Modifier
                     .padding(8.dp)
             ) {
-                Icon(
+                CustomIcon(
                     painter = painterResource(
                         id = if (isFavorite) R.drawable.heart_filled
                         else R.drawable.heart_outline
                     ),
                     contentDescription = stringResource(R.string.favorite_button),
-                    tint = if (isFavorite) Color.Red else Color.White
+                    tint = if (isFavorite) Color.Red else Color.White,
+                    Modifier
                 )
             }
         }
@@ -117,7 +110,7 @@ fun DetailsScreen(
                 .padding(bottom = 8.dp, top = 16.dp)
         )
 
-        Image(
+        CustomImage(
             painter = imagePainter,
             contentDescription = stringResource(R.string.recipe_image),
             modifier = Modifier
@@ -125,7 +118,7 @@ fun DetailsScreen(
                 .size(300.dp)
         )
 
-        Text(
+        CustomText(
             text = stringResource(R.string.ingredients),
             fontSize = 20.sp,
             color = Color.White,

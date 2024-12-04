@@ -4,5 +4,4 @@ enum class Screens(val title: String) {
     FAVORITES("favorites"),
     HOME("home"),
     DETAILS("details"),
-    RESULTS("results")
 }
